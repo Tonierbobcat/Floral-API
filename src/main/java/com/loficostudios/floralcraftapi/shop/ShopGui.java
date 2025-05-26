@@ -67,9 +67,8 @@ public class ShopGui<Impl extends ShopItem<Impl>> extends PopOutGui implements P
     }
 
     @Override
-    public boolean open(@NotNull Player player) {
+    public void create(Player player) {
         loadPage(player, 0);
-        return super.open(player);
     }
 
     private GuiIcon getNextButton() {
@@ -107,7 +106,8 @@ public class ShopGui<Impl extends ShopItem<Impl>> extends PopOutGui implements P
             this.parent = parent;
         }
 
-        public void create() {
+        @Override
+        public void create(Player player) {
             updateItem();
 
             setSlot(0, getRemoveIcon(32));
@@ -127,12 +127,6 @@ public class ShopGui<Impl extends ShopItem<Impl>> extends PopOutGui implements P
 
         private GuiIcon getAddIcon(int amount) {
             return new GuiIcon(parent.template.getAddAmountIcon(instance, amount), "", (p,c) -> addSome(amount));
-        }
-
-        @Override
-        public boolean open(@NotNull Player player) {
-            create();
-            return super.open(player);
         }
 
         public void updateItem() {

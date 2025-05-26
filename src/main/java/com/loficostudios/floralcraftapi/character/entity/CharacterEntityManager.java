@@ -20,6 +20,7 @@ public class CharacterEntityManager {
 
     ActiveMob spawn(CharacterInstance instance, Location location) {
         var character = instance.getCharacter();
+
         var mob = MythicBukkit.inst().getMobManager().getMythicMob(character.getMythic());
         Validate.isTrue(mob.isPresent(), character.getMythic() + " is not a valid MythicMob");
 

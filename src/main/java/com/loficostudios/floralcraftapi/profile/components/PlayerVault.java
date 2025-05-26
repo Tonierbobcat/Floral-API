@@ -1,9 +1,8 @@
 package com.loficostudios.floralcraftapi.profile.components;
 
 import com.google.common.base.Strings;
-import com.loficostudios.floralcraftapi.FloralCraftAPI;
+import com.loficostudios.floralcraftapi.profile.PlayerProfile;
 import com.loficostudios.floralcraftapi.profile.components.base.ProfileComponent;
-import com.loficostudios.floralcraftapi.profile.impl.ProfileData;
 import com.loficostudios.floralcraftapi.utils.Debug;
 import com.loficostudios.floralcraftapi.utils.FileUtils;
 import com.loficostudios.floralcraftapi.utils.interfaces.Mappable;
@@ -23,14 +22,14 @@ public final class PlayerVault extends ProfileComponent implements Mappable<Stri
 
     private Map<Integer, ItemStack> contents = new LinkedHashMap<>(VAULT_SIZE);
 
-    public PlayerVault(ProfileData data) {
+    public PlayerVault(PlayerProfile data) {
         super(data);
         for (int i = 0; i < VAULT_SIZE; i++) {
             contents.put(i, null);
         }
     }
 
-    public PlayerVault(ProfileData data, Map<Integer, String> itemMap) {
+    public PlayerVault(PlayerProfile data, Map<Integer, String> itemMap) {
         super(data);
         itemMap.forEach((i, item) -> {
             if (Strings.isNullOrEmpty(item))
@@ -87,7 +86,7 @@ public final class PlayerVault extends ProfileComponent implements Mappable<Stri
             }
             return true;
         }).whenComplete((value, ex) -> {
-            FloralCraftAPI.inst().getProfileManager().saveProfile(getParent());
+//            FloralCraftAPI.inst().getProfileManager().saveProfile(getParent()); //todo call vaultupdatedevent
         });
     }
 
@@ -114,7 +113,7 @@ public final class PlayerVault extends ProfileComponent implements Mappable<Stri
 
         if (updated) {
             contents.put(slot, item);
-            FloralCraftAPI.inst().getProfileManager().saveProfile(getParent());
+//            FloralCraftAPI.inst().getProfileManager().saveProfile(getParent()); //todo call vaultupdatedevent
         }
     }
 

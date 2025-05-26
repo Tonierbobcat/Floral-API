@@ -20,8 +20,8 @@ public abstract class AbstractCharacterRegistry implements Registry<String, Char
     @Override
     public boolean register(CharacterData object) {
         Validate.isTrue(object != null, "Character cannot be null");
-        Validate.isTrue(!characters.containsKey(object.getID()), "Character with ID: " + object.getID() + " is already registered");
-        characters.put(object.getID(), object);
+        Validate.isTrue(!characters.containsKey(object.getId()), "Character with ID: " + object.getId() + " is already registered");
+        characters.put(object.getId(), object);
         return true;
     }
 

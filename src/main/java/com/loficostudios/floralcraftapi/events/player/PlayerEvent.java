@@ -6,25 +6,14 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerEvent extends Event {
-    private static final HandlerList HANDLERS = new HandlerList();
-
+public abstract class PlayerEvent extends Event {
     private final FloralPlayer player;
 
     public PlayerEvent(Player player) {
-        this.player = new FloralPlayer(player);
+        this.player = FloralPlayer.get(player);
     }
 
     public FloralPlayer getPlayer() {
         return player;
-    }
-
-    @Override
-    public @NotNull HandlerList getHandlers() {
-        return HANDLERS;
-    }
-
-    public static HandlerList getHandlerList() {
-        return HANDLERS;
     }
 }

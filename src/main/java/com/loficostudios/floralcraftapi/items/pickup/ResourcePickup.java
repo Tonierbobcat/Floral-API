@@ -48,7 +48,7 @@ public class ResourcePickup {
     }
 
     public void add(Player player) {
-        ResourceEconomy.add(new FloralPlayer(player), resource, getAmount());
+        ResourceEconomy.add(FloralPlayer.get(player), resource, getAmount());
     }
 
     public int getAmount() {

@@ -2,7 +2,7 @@ package com.loficostudios.floralcraftapi.party;
 
 import com.loficostudios.floralcraftapi.FloralCraftAPI;
 import com.loficostudios.floralcraftapi.party.event.PlayerPartyCreateEvent;
-import com.loficostudios.floralcraftapi.party.player.PartyEntity;
+import com.loficostudios.floralcraftapi.party.player.PartyMember;
 import com.loficostudios.floralcraftapi.player.FloralPlayer;
 import com.loficostudios.floralcraftapi.utils.Debug;
 import io.lumine.mythic.bukkit.MythicBukkit;
@@ -10,7 +10,6 @@ import io.lumine.mythic.core.mobs.ActiveMob;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +27,7 @@ public class PartyManager {
                 parties.values().removeIf(p -> p.getPlayersAlive().isEmpty());
 
                 for (Party party : getParties()) {
-                    for (PartyEntity player : party.getMembers()) {
+                    for (PartyMember player : party.getMembers()) {
                         var isNPC = player.getPlayer().isEmpty();
                         if (isNPC && elapsedTicks % 10 == 0)
                             handleBot(party, player, elapsedTicks);
@@ -40,11 +39,11 @@ public class PartyManager {
         }, 0, 1);
     }
 
-    public Optional<ActiveMob> getActiveMob(PartyEntity player) {
+    public Optional<ActiveMob> getActiveMob(PartyMember player) {
         return  MythicBukkit.inst().getMobManager().getActiveMob(player.getBukkitEntity().getUniqueId());
     }
 
-    private void handleBot(Party party, PartyEntity member, long elapsedTicks) {
+    private void handleBot(Party party, PartyMember member, long elapsedTicks) {
         if (member.isDead())
             return;
         var opt = getActiveMob(member);
@@ -77,7 +76,7 @@ public class PartyManager {
         return entity.hasTarget();
     }
 
-    private void handleNoTarget(PartyEntity member, ActiveMob playerEntity, Party party) { //set target of player to owners target if they have one else have the player follower the owner
+    private void handleNoTarget(PartyMember member, ActiveMob playerEntity, Party party) { //set target of player to owners target if they have one else have the player follower the owner
         if (party.isOwner(member))
             return;
         var owner = party.getOwner();
@@ -127,7 +126,7 @@ public class PartyManager {
         return parties.get(uuid);
     }
 
-    public Party createAnonymousParty(ArrayList<PartyEntity> members, String tag) {
+    public Party createAnonymousParty(ArrayList<PartyMember> members, String tag) {
         var party = new Party(members, tag);
         this.addParty(party);
         var event = new PlayerPartyCreateEvent(party, members.getFirst(), true);
@@ -136,7 +135,7 @@ public class PartyManager {
     }
 
     public Party createParty(Player player) {
-        var p = new FloralPlayer(player);
+        var p = FloralPlayer.get(player);
         var party = new Party(p);
         this.addParty(party);
 

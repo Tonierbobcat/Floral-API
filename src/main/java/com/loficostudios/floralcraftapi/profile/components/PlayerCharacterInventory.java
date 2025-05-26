@@ -2,8 +2,8 @@ package com.loficostudios.floralcraftapi.profile.components;
 
 import com.loficostudios.floralcraftapi.character.CharacterData;
 import com.loficostudios.floralcraftapi.character.CharacterInstance;
+import com.loficostudios.floralcraftapi.profile.PlayerProfile;
 import com.loficostudios.floralcraftapi.profile.components.base.OptionalProfileComponent;
-import com.loficostudios.floralcraftapi.profile.impl.ProfileData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -15,7 +15,7 @@ public class PlayerCharacterInventory extends OptionalProfileComponent {
     private final HashMap<UUID, CharacterInstance> characters = new HashMap<>();
     private final HashMap<String, UUID> characterData = new HashMap<>();
 
-    public PlayerCharacterInventory(@Nullable ProfileData profile) {
+    public PlayerCharacterInventory(@Nullable PlayerProfile profile) {
         super(profile);
     }
 
@@ -34,16 +34,16 @@ public class PlayerCharacterInventory extends OptionalProfileComponent {
     }
 
     public boolean removeCharacter(CharacterData character) {
-        return this.removeCharacter(character.getID());
+        return this.removeCharacter(character.getId());
     }
 
     public boolean addCharacter(CharacterData character, int level, int experience) {
         var uuid = UUID.randomUUID();
         var instance = new CharacterInstance(character, uuid, level, experience);
-        if (characterData.containsKey(character.getID()))
+        if (characterData.containsKey(character.getId()))
             return false;
         characters.put(instance.getUniqueId(), instance);
-        characterData.put(character.getID(), instance.getUniqueId());
+        characterData.put(character.getId(), instance.getUniqueId());
         return true;
     }
 

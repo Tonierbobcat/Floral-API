@@ -1,8 +1,8 @@
 package com.loficostudios.floralcraftapi.profile.components.holders;
 
-import com.loficostudios.floralcraftapi.profile.components.PlayerResourceManager;
+import com.loficostudios.floralcraftapi.profile.components.PlayerResources;
 import org.jetbrains.annotations.NotNull;
 
 public interface ResourceHolder {
-    @NotNull PlayerResourceManager getResources();
+    @NotNull PlayerResources getResources();
 }

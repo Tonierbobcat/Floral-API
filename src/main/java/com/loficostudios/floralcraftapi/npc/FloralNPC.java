@@ -13,4 +13,6 @@ public interface FloralNPC extends FloralEntity {
     default void onClick(ClickInfo info) {
         getData().onClick(info);
     }
+
+    void remove();
 }

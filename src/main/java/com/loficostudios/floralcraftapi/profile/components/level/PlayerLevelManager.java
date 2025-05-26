@@ -1,10 +1,9 @@
 package com.loficostudios.floralcraftapi.profile.components.level;
 
-import com.loficostudios.floralcraftapi.FloralCraftAPI;
 import com.loficostudios.floralcraftapi.events.player.PlayerExperienceUpdatedEvent;
 import com.loficostudios.floralcraftapi.events.player.PlayerLevelUpEvent;
+import com.loficostudios.floralcraftapi.profile.PlayerProfile;
 import com.loficostudios.floralcraftapi.profile.components.base.OptionalProfileComponent;
-import com.loficostudios.floralcraftapi.profile.impl.ProfileData;
 import com.loficostudios.floralcraftapi.utils.Debug;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -28,7 +27,7 @@ public class PlayerLevelManager extends OptionalProfileComponent {
 
     private final Consumer<Integer> setLevel;
 
-    public PlayerLevelManager(@Nullable ProfileData data, ConfigurationSection config, @Nullable Consumer<Integer> setLevel) {
+    public PlayerLevelManager(@Nullable PlayerProfile data, ConfigurationSection config, @Nullable Consumer<Integer> setLevel) {
         super(data);
         this.setLevel = setLevel;
         if (config == null)
@@ -46,7 +45,7 @@ public class PlayerLevelManager extends OptionalProfileComponent {
         Debug.log(this.toString());
     }
 
-    public PlayerLevelManager(@Nullable ProfileData data, ConfigurationSection config, @Nullable Consumer<Integer> setLevel, Integer currentLevel, Integer currentExperience) {
+    public PlayerLevelManager(@Nullable PlayerProfile data, ConfigurationSection config, @Nullable Consumer<Integer> setLevel, Integer currentLevel, Integer currentExperience) {
         super(data);
         if (config == null)
             throw new IllegalArgumentException("Config is null");
@@ -126,7 +125,7 @@ public class PlayerLevelManager extends OptionalProfileComponent {
                 var player = profile.getHolder().getPlayer();
                 if (player != null)
                     pluginManager.callEvent(new PlayerLevelUpEvent(player, levels));
-                FloralCraftAPI.inst().getProfileManager().saveProfile(profile);
+//                FloralCraftAPI.inst().getProfileManager().saveProfile(profile);  //todo call level update event
             });
             if (setLevel != null)
                 setLevel.accept(this.currentLevel);
@@ -151,7 +150,7 @@ public class PlayerLevelManager extends OptionalProfileComponent {
 
         updateLevel();
         opt.ifPresent((profile) -> {
-            FloralCraftAPI.inst().getProfileManager().saveProfile(profile);
+//            FloralCraftAPI.inst().getProfileManager().saveProfile(profile); //todo call level update event
         });
     }
 

@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
 
-public class CharacterInstance implements LevelHolder {
+public class CharacterInstance implements LevelHolder { //todo make this an interface
     private final CharacterData character;
     private final PlayerLevelManager level;
     private final UUID uuid;
@@ -42,7 +42,7 @@ public class CharacterInstance implements LevelHolder {
     public Collection<StatModifier> getAppliedAdditionalBuffs() {
         var level = getLevel();
         var result = new ArrayList<StatModifier>();
-        var key = character.getID().toUpperCase();
+        var key = character.getId().toUpperCase();
         for (StatModifier modifier : new ArrayList<>(Arrays.stream(character.getAdditionalBuffs()).toList())) {
             modifier.getStat();
             Validate.isTrue(!modifier.getStat().isEmpty());

@@ -1,6 +1,6 @@
 package com.loficostudios.floralcraftapi.profile.components.resources;
 
-import com.loficostudios.floralcraftapi.profile.impl.ProfileData;
+import com.loficostudios.floralcraftapi.profile.PlayerProfile;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -128,11 +128,11 @@ public enum Resource {
     private final Class<? extends Number> type;
     private final String display;
 
-    private final Function<ProfileData, Double> current;
+    private final Function<PlayerProfile, Double> current;
 
-    private final Function<ProfileData, Double> max;
+    private final Function<PlayerProfile, Double> max;
 
-    private final BiConsumer<ProfileData, Double> set;
+    private final BiConsumer<PlayerProfile, Double> set;
 
     Resource(ResourceData data, Class<? extends Number> type) {
         this.color = data.getColor();
@@ -158,17 +158,17 @@ public enum Resource {
     }
 
     @Deprecated
-    public double getCurrent(ProfileData player) {
+    public double getCurrent(PlayerProfile player) {
         return current.apply(player);
     }
 
     @Deprecated
-    public double getMax(ProfileData player) {
+    public double getMax(PlayerProfile player) {
         return max.apply(player);
     }
 
     @Deprecated
-    public void setCurrent(ProfileData player, double amount) {
+    public void setCurrent(PlayerProfile player, double amount) {
         set.accept(player, amount);
     }
 

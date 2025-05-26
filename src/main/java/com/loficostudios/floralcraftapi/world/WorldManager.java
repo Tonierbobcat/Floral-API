@@ -1,10 +1,12 @@
 package com.loficostudios.floralcraftapi.world;
 
+import com.loficostudios.floralcraftapi.FloralCraftAPI;
 import com.loficostudios.floralcraftapi.registry.Registry;
 import com.loficostudios.floralcraftapi.world.event.*;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -13,6 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -22,26 +25,16 @@ public class WorldManager implements Registry<String, FloralWorld>, Listener {
     private final Random random;
     private JavaPlugin plugin;
 
-    private final WorldProvider provider;
-
-    public WorldProvider getProvider() {
-        return provider;
-    }
-
-    public WorldManager(JavaPlugin plugin, WorldProvider provider) {
+    public WorldManager(JavaPlugin plugin) {
         this.random = new Random(System.currentTimeMillis());
         this.plugin = plugin;
-        this.provider = provider;
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (FloralWorld world : registeredWorlds.values()) {
-                    if (!world.isActive())
-                        continue;
-                    world.update();
+        FloralCraftAPI.runTaskTimer(() -> {
+            for (FloralWorld world : registeredWorlds.values()) {
+
+                if (world instanceof EventWorld eventWorld) {
                     if (world.getPlayers().isEmpty())
                         continue;
-                    for (WorldEvent e : world.getEvents()) {
+                    for (WorldEvent e : eventWorld.getEvents()) {
                         var rate = e.getRate(world);
                         if (random.nextDouble() > rate)
                             continue;
@@ -55,8 +48,9 @@ public class WorldManager implements Registry<String, FloralWorld>, Listener {
                         break;
                     }
                 }
+
             }
-        }.runTaskTimer(plugin, 0, 1);
+        }, 0, 1);
     }
 
     private void startEvent(FloralWorld world, WorldEvent event) {
@@ -90,7 +84,9 @@ public class WorldManager implements Registry<String, FloralWorld>, Listener {
         Validate.isTrue(!registeredWorlds.containsKey(world.getName()), "World is already registered!");
 
         registeredWorlds.put(world.getName(), world);
-        Bukkit.getPluginManager().registerEvents(world, plugin);
+        if (world instanceof Listener) {
+            Bukkit.getPluginManager().registerEvents(((Listener) world), plugin);
+        }
         return true;
     }
 
@@ -101,8 +97,8 @@ public class WorldManager implements Registry<String, FloralWorld>, Listener {
 
     public void unregister(String name) {
         FloralWorld world = registeredWorlds.remove(name);
-        if (world != null) {
-            HandlerList.unregisterAll(world);
+        if (world instanceof Listener) {
+            HandlerList.unregisterAll(((Listener) world));
         }
     }
 
@@ -148,4 +144,41 @@ public class WorldManager implements Registry<String, FloralWorld>, Listener {
                 e.getPlayer(),
                 WorldExitReason.QUIT));
     }
+
+//    /**
+//     *
+//     * @return the most basic usage of floral world with settings loaded from optional config file
+//     */
+//    static FloralWorld from(World world) {
+//        return from(world, new WorldSettings(world));
+//    }
+//
+//    /**
+//     *
+//     * @return the most basic usage of floral world
+//     */
+//    static FloralWorld from(World world, @NotNull WorldSettings settings) {
+//        return new FloralWorld() {
+//
+//            @Override
+//            public Collection<Player> getPlayers() {
+//                return getBukkitWorld().getPlayers();
+//            }
+//
+//            @Override
+//            public String getName() {
+//                return world.getName();
+//            }
+//
+//            @Override
+//            public World getBukkitWorld() {
+//                return world;
+//            }
+//
+//            @Override
+//            public WorldSettings getSettings() {
+//                return settings;
+//            }
+//        };
+//    }
 }

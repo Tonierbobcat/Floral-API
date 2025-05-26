@@ -36,7 +36,7 @@ public class CharacterData extends IdentifiableObject<String> {
         return Optional.ofNullable(model);
     }
 
-    public String getMythic() {
+    public String getMythic() { //remove this
         return mythic;
     }
 

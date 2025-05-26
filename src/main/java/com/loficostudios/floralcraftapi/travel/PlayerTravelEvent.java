@@ -5,30 +5,22 @@ import com.loficostudios.floralcraftapi.world.FloralWorld;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerTravelEvent extends PlayerEvent implements Cancellable {
 
     private boolean cancelled;
 
-    public DestinationType getDestinationType() {
-        return destinationType;
-    }
+    private final Destination destination;
 
-    private final DestinationType destinationType;
-    private final Location destination;
+    public PlayerTravelEvent(Player player, Destination destination) {
+        super(player);
 
-    public PlayerTravelEvent(Player player, FloralWorld destination) {
-        super(player);
-        this.destinationType = DestinationType.WORLD;
-        this.destination = destination.getSpawnLocation();
-    }
-    public PlayerTravelEvent(Player player, Location destination) {
-        super(player);
-        this.destinationType = DestinationType.LOCATION;
         this.destination = destination;
     }
 
-    public Location getDestination() {
+    public Destination getDestination() {
         return destination;
     }
 
@@ -42,8 +34,12 @@ public class PlayerTravelEvent extends PlayerEvent implements Cancellable {
         cancelled = b;
     }
 
-    public enum DestinationType {
-        LOCATION,
-        WORLD
+    @Override
+    public @NotNull HandlerList getHandlers() {
+        return HANDLERS;
+    }
+    private static final HandlerList HANDLERS = new HandlerList();
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
     }
 }

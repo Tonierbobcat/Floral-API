@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
 
 public class WorldLoader {
     public boolean unloadWorld(World world, boolean save) {
@@ -29,15 +30,23 @@ public class WorldLoader {
         return FileUtils.deleteDirectory(folder);
     }
 
-    public @Nullable FloralWorld getNewWorldFromFile(File source, String name) {
+    public @Nullable World getNewWorldFromFile(File source, String name) {
         Validate.isTrue(copyWorldFolderIntoWorldContainer(source, name));
-        var world = new WorldCreator(name).createWorld();
-        if (world == null)
-            return null;
-        return FloralWorld.from(world);
+        return new WorldCreator(name).createWorld();
+    }
+
+    public CompletableFuture<@Nullable World> getNewWorldFromFileAsync(File source, String name) {
+        return CompletableFuture.supplyAsync(() -> copyWorldFolderIntoWorldContainer(source, name)).thenApply(success -> {
+            if (success) {
+                return new WorldCreator(name).createWorld();
+            } else {
+                return null;
+            }
+        });
     }
 
     public boolean copyWorldFolderIntoWorldContainer(File source, String name) {
         return FileUtils.copyFileStructure(source, new File(Bukkit.getWorldContainer(), name), Arrays.asList("uid.dat", "session.lock"));
     }
+
 }

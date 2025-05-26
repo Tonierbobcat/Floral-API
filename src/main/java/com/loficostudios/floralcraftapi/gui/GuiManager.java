@@ -12,8 +12,9 @@ import com.loficostudios.floralcraftapi.FloralCraftAPI;
 import com.loficostudios.floralcraftapi.gui.events.GuiCloseEvent;
 import com.loficostudios.floralcraftapi.gui.events.GuiIconClickEvent;
 import com.loficostudios.floralcraftapi.gui.events.GuiOpenEvent;
-import com.loficostudios.floralcraftapi.gui.interfaces.IGui;
+import com.loficostudios.floralcraftapi.gui.interfaces.FloralGui;
 import com.loficostudios.floralcraftapi.utils.SimpleCooldown;
+import com.loficostudios.floralcraftapi.utils.bukkit.FloralScheduler;
 import com.loficostudios.floralcraftapi.utils.interfaces.Cooldown;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -29,14 +30,20 @@ import java.util.*;
 
 public class GuiManager implements Listener {
 
-    private final Map<UUID, IGui> openedMenus = new HashMap<>();
+    private final Map<UUID, FloralGui> openedMenus = new HashMap<>();
     private final Cooldown cooldowns = new SimpleCooldown(250);
 
-    public IGui getGui(@NotNull Player player) {
+    private final FloralScheduler scheduler;
+
+    public GuiManager(FloralScheduler scheduler) {
+        this.scheduler = scheduler;
+    }
+
+    public FloralGui getGui(@NotNull Player player) {
         return this.openedMenus.get(player.getUniqueId());
     }
 
-    public void setGui(@NotNull Player player, @Nullable IGui gui) {
+    public void setGui(@NotNull Player player, @Nullable FloralGui gui) {
         UUID uuid = player.getUniqueId();
         if (gui == null && openedMenus.containsKey(uuid))
             this.openedMenus.remove(uuid);
@@ -47,7 +54,7 @@ public class GuiManager implements Listener {
     protected void onClick(InventoryClickEvent e) {
         if (e.isCancelled())
             return;
-        if (!(e.getInventory().getHolder() instanceof IGui gui))
+        if (!(e.getInventory().getHolder() instanceof FloralGui gui))
             return;
         Player player = (Player) e.getWhoClicked();
 
@@ -97,7 +104,7 @@ public class GuiManager implements Listener {
         handleClick(e, player, gui, slot);
     }
 
-    private void handleClick(InventoryClickEvent e, Player player, IGui gui, int slot) {
+    private void handleClick(InventoryClickEvent e, Player player, FloralGui gui, int slot) {
         var icon = gui.getIcon(slot);
 
         if (icon == null)
@@ -121,7 +128,7 @@ public class GuiManager implements Listener {
         setGui(player, e.getGui());
 
         transitioningPlayers.add(player);
-        FloralCraftAPI.runTaskLater(() -> transitioningPlayers.remove(player), 2L);
+        scheduler.runTaskLater(() -> transitioningPlayers.remove(player), 2L);
     }
 
     @EventHandler
@@ -133,14 +140,14 @@ public class GuiManager implements Listener {
     }
 
     private void handlePopOutGui(GuiCloseEvent e, PopOutGui gui) {
-        FloralCraftAPI.runTaskLater(() -> gui.onClose(e.getPlayer()), 1);
+        scheduler.runTaskLater(() -> gui.onClose(e.getPlayer()), 1);
     }
     public boolean isTransitioning(Player player) {
         return transitioningPlayers.contains(player);
     }
     @EventHandler
     private void onClose(InventoryCloseEvent e) {
-        if (!(e.getInventory().getHolder() instanceof IGui gui))
+        if (!(e.getInventory().getHolder() instanceof FloralGui gui))
             return;
         if (!(e.getPlayer() instanceof Player player))
             return;

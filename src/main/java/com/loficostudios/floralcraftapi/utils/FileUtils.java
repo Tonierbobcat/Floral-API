@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 public class FileUtils {
     public static String serializeObjectToString(Object object) {
@@ -69,14 +70,22 @@ public class FileUtils {
     }
 
     public static boolean copyFileStructure(File source, File target, List<String> ignore) {
+        var pattern = Pattern.compile("[\\\\/:*?\"<>|]");
+        if (pattern.matcher(source.getName()).find()) {
+            throw new IllegalArgumentException("Source file contains invalid characters: " + source.getName());
+        }
+
+        if (pattern.matcher(target.getName()).find()) {
+            throw new IllegalArgumentException("Target file contains invalid characters: " + target.getName());
+        }
         if (ignore.contains(source.getName())) {
-            return false;
+            return true;
         }
 
         try {
             if (source.isDirectory()) {
                 if (!target.exists() && !target.mkdirs()) {
-                    throw new IOException("Couldn't create directory: " + target);
+                    throw new IOException("Could not create directories: " + target);
                 }
                 String[] files = source.list();
                 if (files != null) {

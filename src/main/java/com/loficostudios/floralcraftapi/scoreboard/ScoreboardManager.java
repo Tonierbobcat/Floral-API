@@ -44,7 +44,7 @@ public class ScoreboardManager {
         player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         if (sb != null) {
             activeScoreboards.put(player.getUniqueId(), sb);
-            player.setScoreboard(sb.bukkit());
+            player.setScoreboard(sb.bukkit(player));
         }
     }
 

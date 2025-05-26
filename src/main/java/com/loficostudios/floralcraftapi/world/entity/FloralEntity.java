@@ -1,7 +1,5 @@
 package com.loficostudios.floralcraftapi.world.entity;
 
-import com.loficostudios.floralcraftapi.FloralCraftAPI;
-import com.loficostudios.floralcraftapi.npc.NPCData;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -20,15 +18,11 @@ public interface FloralEntity {
 
     @NotNull Location getLocation();
 
+    default int entityId() {
+        return getBukkitEntity().getEntityId();
+    }
+
     boolean teleport(@NotNull Location location);
 
     boolean isDead();
-
-    default void remove() {
-        FloralCraftAPI.getConfig().getNPCProvider().remove(this);
-    }
-
-    static FloralEntity spawn(NPCData data, Location location) {
-        return FloralCraftAPI.getConfig().getNPCProvider().spawn(data, location);
-    }
 }

@@ -5,6 +5,6 @@ import org.bukkit.entity.Player;
 
 public record ClickInfo(FloralPlayer clicker, FloralNPC entity, NPCClickType click) {
     public ClickInfo(Player clicker, FloralNPC entity, NPCClickType click) {
-        this(new FloralPlayer(clicker), entity, click);
+        this(FloralPlayer.get(clicker), entity, click);
     }
 }

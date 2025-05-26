@@ -18,7 +18,7 @@ public class NPCRegistry implements Registry<String, NPCData> {
 
     @Override
     public boolean register(NPCData npc) {
-        registered.put(npc.getID(), npc);
+        registered.put(npc.getId(), npc);
         return true;
     }
 
@@ -31,7 +31,7 @@ public class NPCRegistry implements Registry<String, NPCData> {
         Validate.isTrue(id != null);
         var npcs = new ArrayList<>(this.registered.values());
         for (NPCData npc : npcs) {
-            if (npc.getID().equals(id))
+            if (npc.getId().equals(id))
                 return npc;
         }
         return null;

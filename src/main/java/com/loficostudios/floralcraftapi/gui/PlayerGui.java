@@ -18,12 +18,11 @@ public class PlayerGui extends PopOutGui implements Paginated {
     private int page;
 
     public PlayerGui(Consumer<Player> onClose, BiConsumer<Player, Player> onClick) {
-        super(44, "Players", onClose);
+        super(44, Component.text("Players"), onClose);
         this.onClick = onClick;
-        create(0);
     }
 
-    public void create(int page) {
+    private void loadPage(int page) {
         clear();
         getInventory().clear();
 
@@ -36,6 +35,11 @@ public class PlayerGui extends PopOutGui implements Paginated {
             setSlot(slot, getIcon(player));
             slot++;
         }
+    }
+
+    @Override
+    public void create(Player player) {
+        loadPage(0);
     }
 
     private GuiIcon getIcon(Player player) {
@@ -51,11 +55,11 @@ public class PlayerGui extends PopOutGui implements Paginated {
 
     @Override
     public void nextPage(Player player) {
-        create(page + 1);
+        loadPage(page + 1);
     }
 
     @Override
     public void previousPage(Player player) {
-        create(Math.max(0, page - 1));
+        loadPage(Math.max(0, page - 1));
     }
 }

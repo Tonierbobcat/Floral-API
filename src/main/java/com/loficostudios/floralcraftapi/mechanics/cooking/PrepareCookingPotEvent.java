@@ -16,7 +16,7 @@ public class PrepareCookingPotEvent extends Event {
 
     public PrepareCookingPotEvent(CookingPot pot, Player player, Block block) {
         this.pot = pot;
-        this.player = new FloralPlayer(player);
+        this.player = FloralPlayer.get(player);
         this.block = block;
     }
 

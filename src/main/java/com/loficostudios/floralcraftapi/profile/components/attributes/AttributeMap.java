@@ -1,6 +1,6 @@
 package com.loficostudios.floralcraftapi.profile.components.attributes;
 
-import com.loficostudios.floralcraftapi.profile.impl.ProfileData;
+import com.loficostudios.floralcraftapi.profile.PlayerProfile;
 import com.loficostudios.floralcraftapi.utils.Debug;
 import io.lumine.mythic.lib.api.stat.StatInstance;
 import io.lumine.mythic.lib.api.stat.modifier.StatModifier;
@@ -11,10 +11,10 @@ import java.util.Map;
 
 public class AttributeMap {
     private Map<Attribute, AttributeInstance> attributes = new HashMap<>();
-    private final ProfileData profile;
-    public AttributeMap(ProfileData profile) {
+    private final PlayerProfile profile;
+    public AttributeMap(PlayerProfile profile) {
         this.profile = profile;
-        for (Attribute attribute : Attribute.values()) {
+        for (Attribute attribute : Attributes.values()) {
             attributes.put(attribute, new AttributeInstance(profile, attribute));
         }
     }
@@ -28,12 +28,12 @@ public class AttributeMap {
         private int max;
 
         private final Attribute attribute;
-        private final ProfileData profile;
+        private final PlayerProfile profile;
 
         private Map<String, AttributeModifier> modifiers = new HashMap<>();
 
 
-        public AttributeInstance(ProfileData profile, Attribute attribute) {
+        public AttributeInstance(PlayerProfile profile, Attribute attribute) {
             this.attribute = attribute;
             this.profile = profile;
         }
@@ -54,7 +54,7 @@ public class AttributeMap {
             var total = getEffective();
             var buffs = attribute.getBuffs();
             for (StatInstance ins : mmo.getStatMap().getInstances())
-                ins.removeIf(str -> str.equals("attribute." + attribute.name().toLowerCase()));
+                ins.removeIf(str -> str.equals("attribute." + attribute.getName().toLowerCase()));
             for (StatModifier buff : buffs)
                 buff.multiply(total).register(mmo);
         }

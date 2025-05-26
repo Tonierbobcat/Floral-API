@@ -14,7 +14,7 @@ public class PlayerPartyInviteAcceptEvent extends PartyEvent {
     public PlayerPartyInviteAcceptEvent(Party party, OfflinePlayer sender, Player receiver) {
         super(party);
         this.sender = sender;
-        this.receiver = new FloralPlayer(receiver);
+        this.receiver = FloralPlayer.get(receiver);
     }
 
     public OfflinePlayer getSender() {

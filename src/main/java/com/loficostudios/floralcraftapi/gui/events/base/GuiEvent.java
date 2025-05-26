@@ -1,6 +1,6 @@
 package com.loficostudios.floralcraftapi.gui.events.base;
 
-import com.loficostudios.floralcraftapi.gui.interfaces.IGui;
+import com.loficostudios.floralcraftapi.gui.interfaces.FloralGui;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -15,17 +15,17 @@ public abstract class GuiEvent extends Event implements Cancellable {
         return player;
     }
 
-    public IGui getGui() {
+    public FloralGui getGui() {
         return gui;
     }
 
     private final Player player;
 
-    private final IGui gui;
+    private final FloralGui gui;
 
     private boolean cancelled;
 
-    public GuiEvent(Player player, IGui gui) {
+    public GuiEvent(Player player, FloralGui gui) {
         this.player = player;
         this.gui = gui;
     }

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-public abstract class MutableGui extends FloralGui {
+public abstract class MutableGui extends AbstractFloralGui {
 
     @Deprecated
     public MutableGui(int size, String title) {

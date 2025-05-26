@@ -13,8 +13,8 @@ public class PlayerPartyInviteEvent extends PartyEvent {
 
     public PlayerPartyInviteEvent(Party party, PartyInvitePlayerResult result, Player sender, Player receiver) {
         super(party);
-        this.sender = new FloralPlayer(sender);
-        this.receiver = new FloralPlayer(receiver);
+        this.sender = FloralPlayer.get(sender);
+        this.receiver = FloralPlayer.get(receiver);
         this.result = result;
     }
 

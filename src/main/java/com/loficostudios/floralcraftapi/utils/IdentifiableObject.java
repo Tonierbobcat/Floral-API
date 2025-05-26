@@ -8,7 +8,7 @@ public abstract class IdentifiableObject<T extends Serializable> {
         this.id = id;
     }
 
-    public T getID() {
+    public T getId() {
         return id;
     }
 }

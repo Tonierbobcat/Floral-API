@@ -1,8 +1,8 @@
 package com.loficostudios.floralcraftapi.profile.components.mail;
 
 import com.loficostudios.floralcraftapi.party.PartyInvite;
+import com.loficostudios.floralcraftapi.profile.PlayerProfile;
 import com.loficostudios.floralcraftapi.profile.components.base.ProfileComponent;
-import com.loficostudios.floralcraftapi.profile.impl.ProfileData;
 import org.bukkit.OfflinePlayer;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.List;
 public class MailBox extends ProfileComponent {
     private final List<Mail> inbox = new ArrayList<>();
 
-    public MailBox(ProfileData profile) {
+    public MailBox(PlayerProfile profile) {
         super(profile);
     }
 

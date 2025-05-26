@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 import java.util.function.Consumer;
 
-public class PopOutGui extends FloralGui {
+public class PopOutGui extends AbstractFloralGui {
     private final Consumer<Player> onClose;
 
     @Deprecated

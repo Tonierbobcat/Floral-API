@@ -21,21 +21,10 @@ import java.util.Objects;
 
 public class UpgradeAnvil {
 
-    private final HashMap<String, ResourceRequirement> requirementsPerType = new HashMap<>();
+    private final HashMap<String, ResourceRequirement> requirementsPerType;
 
-    protected UpgradeAnvil(Config config) {
-        for (String key : config.getKeys(false)) {
-            Debug.log("Key: " + key);
-        }
-        var sect = config.getConfigurationSection("requirements-per-type");
-//        Validate.isTrue((sect != null), "Section cannot be null");
-        for (String key : sect.getKeys(false)) {
-            requirementsPerType.put(key, requirementsPerType.get(key));
-        }
-    }
-
-    public UpgradeAnvil() {
-        this(FloralCraftAPI.getConfig().upgradeAnvil());
+    public UpgradeAnvil(HashMap<String, UpgradeAnvil.ResourceRequirement> requirementsPerType) {
+        this.requirementsPerType = requirementsPerType;
     }
 
     public boolean upgradable(@NotNull ItemStack itemstack) {
@@ -148,7 +137,7 @@ public class UpgradeAnvil {
     }
 
     public @NotNull UpgradeAnvilResult upgrade(Player player, ItemStack itemstack, boolean bypass) {
-        return upgrade(new FloralPlayer(player), itemstack, bypass);
+        return upgrade(FloralPlayer.get(player), itemstack, bypass);
     }
 
     private UpgradeWeaponResult applyUpgrade(NBTItem item) {
